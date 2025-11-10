@@ -9,7 +9,7 @@ def process_items(items):
             "channel": item.get("snippet", {}).get("channelTitle", ""),
             "category_id": item.get("snippet", {}).get("categoryId", ""),
             "publish_time": item.get("snippet", {}).get("publishedAt", ""),
-            "tags": ", ".join(item.get("snippet", {}).get("tags", [])),  # join list to string
+            "tags": ", ".join(item.get("snippet", {}).get("tags", [])),
             "duration": item.get("contentDetails", {}).get("duration", ""),
             "view_count": int(item.get("statistics", {}).get("viewCount", 0)),
             "like_count": int(item.get("statistics", {}).get("likeCount", 0)),
@@ -20,7 +20,7 @@ def process_items(items):
     ]
 
     df = pd.DataFrame(rows)
-    print(df.head())
+    print(df)
     return df
     
 def create_dataset():
