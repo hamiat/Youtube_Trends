@@ -1,34 +1,31 @@
 import pandas as pd
-import streamlit as st
 from config import fetch_data
 
-def process_data():
-    rows= []
-    items = fetch_data()
+def process_items(items):
+    rows = [
+        {
+            "video_id": item.get("id", ""),
+            "title": item.get("snippet", {}).get("title", ""),
+            "channel": item.get("snippet", {}).get("channelTitle", ""),
+            "category_id": item.get("snippet", {}).get("categoryId", ""),
+            "publish_time": item.get("snippet", {}).get("publishedAt", ""),
+            "tags": ", ".join(item.get("snippet", {}).get("tags", [])),  # join list to string
+            "duration": item.get("contentDetails", {}).get("duration", ""),
+            "view_count": int(item.get("statistics", {}).get("viewCount", 0)),
+            "like_count": int(item.get("statistics", {}).get("likeCount", 0)),
+            "dislike_count": int(item.get("statistics", {}).get("dislikeCount", 0)),
+            "comment_count": int(item.get("statistics", {}).get("commentCount", 0))
+        }
+        for item in items
+    ]
 
-    for item in items:
-        snippet = item.get("snippet", {})
-        stats = item.get("statistics", {})
-        video_id = item.get("id", "")
-
-        try: 
-            rows.append({
-                "video_id": video_id,
-                "title": snippet.get("title", ""),
-                "channel": snippet.get("channelTitle", ""),
-                "category_id": snippet.get("categoryId", ""),
-                "publish_time": snippet.get("publishedAt", ""),
-                "view_count": int(stats.get("viewCount", 0)),
-                "like_count": int(stats.get("likeCount", 0)),
-                "comment_count": int(stats.get("commentCount", 0))})
-        except Exception as e:
-            print(f"Skipping video due to error: {e}")
-    
     df = pd.DataFrame(rows)
+    print(df.head())
     return df
-
+    
 def create_dataset():
-    df = process_data()
+    items = fetch_data()
+    df = process_items(items)
     df.to_csv("trending_videos.csv", index = False)
 
 
