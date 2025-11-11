@@ -13,8 +13,9 @@ def process_items(items):
             "duration": item.get("contentDetails", {}).get("duration", ""),
             "view_count": int(item.get("statistics", {}).get("viewCount", 0)),
             "like_count": int(item.get("statistics", {}).get("likeCount", 0)),
-            "dislike_count": int(item.get("statistics", {}).get("dislikeCount", 0)),
-            "comment_count": int(item.get("statistics", {}).get("commentCount", 0))
+            "comment_count": int(item.get("statistics", {}).get("commentCount", 0)),
+            "paid_ads" : item.get("paidProductPlacementDetails", {}).get("hasPaidProductPlacement", ""),
+            "region" : item.get("code", "")
         }
         for item in items
     ]
